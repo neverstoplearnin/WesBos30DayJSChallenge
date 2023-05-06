@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+
+<!-- Each key is a sub class of the keys class-->
+  <div class="keys">
+<!-- data-key="65" is used because that number is connected to "A" key-->    
+    <div data-key="65" class="key">
+<!--'<kbd> represents user input. In this case 'A' upper or lower case-->
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+<!--Plays the sound associated with the key that is pressed.--> 
+<!--'data attribute' is created by putting data- before something.--> 
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+<script>
+  function removeTransition(e) {
+    if (e.propertyName !== 'transform') return;
+    e.target.classList.remove('playing');
+  }
+
+  function playSound(e) {
+    //Selects the relevant audio by the event key code. (number connected to key pressed)
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    //Selects the relevant key by the event key code. (number connected to key pressed)
+    const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+    if (!audio) return;
+
+    // Adds the playing class to the relevant key to give css animation.
+    key.classList.add('playing');
+    //Resets the time to 0 when function is triggered to restart sound on every key press.
+    audio.currentTime = 0;
+    //Plays the audio.
+    audio.play();
+  }
+
+  //Puts ever key into a constant variable  called keys.
+  const keys = Array.from(document.querySelectorAll('.key'));
+  //Each key gets an event listener  on it for 'transitionend' which triggers the removeTransition function.
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  //A window event listener that plays a sound if a key is pressed.
+  window.addEventListener('keydown', playSound);
+</script>
+
+
+</body>
+</html>
